@@ -1,0 +1,9 @@
+- hosts: doi-service
+  roles:
+    - common
+    - postfix
+    - {role: db-backup, db: postgres}
+    - {role: postgresql, pg_version: "9.6"}
+    - {role: pg_instance, extensions: ["citext", "pgcrypto"]}
+    - webserver
+    - doi-service

@@ -1,0 +1,8 @@
+- hosts: ecodata
+  roles:
+    - common
+    - java
+    - { role: mongodb-org, dbPath: "{{ ecodata_dbPath }}"}
+    - { role: tomcat, when: not exec_jar }
+    - webserver
+    - ecodata

@@ -1,0 +1,27 @@
+- hosts: all
+  gather_facts: False
+  tasks:
+    - name: install python 2
+      raw: sudo bash -c "test -e /usr/bin/python || (apt -qqy update && apt install -qy python-minimal python-apt)"
+
+- hosts: phylolink
+  roles:
+    - phylolink-dependencies
+    - common
+    - java
+    - {role: db-backup, db: postgres}
+    - {role: postgresql, pg_version: "9.6", postgis_version: "2.4"}
+    - {role: pg_instance, extensions: ["citext", "pgcrypto"]}
+    - web2py
+    - web2pyApps
+    - webserver
+    - phylolink
+    - {role: nameindex, nameindex_user: "phylolink" }
+  become: yes
+  become_user: root
+  vars:
+    deleteWeb2py: False
+    deletePhylesystem: False
+    deleteNCL: False
+    deleteToNexml: False
+    ansible_ssh_pipelining: true
